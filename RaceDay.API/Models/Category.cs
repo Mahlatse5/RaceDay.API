@@ -10,7 +10,7 @@ namespace RaceDay.API.Models
 
         [Required]
         public int EventId { get; set; }
-        [ForeignKey("EventId")]
+        [ForeignKey("EventId")] 
         public Event Event { get; set; }
 
         [Required, MaxLength(50)]
