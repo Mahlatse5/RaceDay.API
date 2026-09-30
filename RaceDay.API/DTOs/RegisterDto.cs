@@ -11,7 +11,7 @@ namespace RaceDay.API.DTOs
         public string LastName { get; set; }
 
         [Required, EmailAddress, MaxLength(100)]
-        public string Email { get; set; }
+        public string Email { get; set; } 
 
         [Required, MinLength(6)]
         public string Password { get; set; }
