@@ -19,7 +19,7 @@ namespace RaceDay.API.Models
 
         [Required, MaxLength(100)]
         public string Location { get; set; }
-
+        
         [Required, Column(TypeName = "decimal(5,2)")]
         public decimal Distance { get; set; }
 
