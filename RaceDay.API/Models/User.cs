@@ -31,4 +31,4 @@ namespace RaceDay.API.Models
         public ICollection<Event> OrganisedEvents { get; set; }
         public ICollection<Enrolment> Enrolments { get; set; }
     }
-}
+} 
