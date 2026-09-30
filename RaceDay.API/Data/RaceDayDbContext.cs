@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RaceDay.API.Models;
+using System.Linq;
 
 namespace RaceDay.API.Data
 {
@@ -16,5 +17,15 @@ namespace RaceDay.API.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Enrolment> Enrolments { get; set; }
         public DbSet<Result> Results { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // GLOBAL FIX: This loop changes all relationships to "Restrict" 
+            // to prevent the "multiple cascade paths" error in SQL Server.
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            }
+        }
     }
 }
