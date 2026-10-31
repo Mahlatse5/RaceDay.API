@@ -20,17 +20,18 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" href="/">Home</a>
                         </li>
 
                         @* Show these links ONLY if user is NOT logged in *@
                         @if (Context.Session.GetInt32("UserId") == null)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="Login">Login</a>
+                                @* Hardcoded href to guarantee it works *@
+                                <a class="nav-link text-dark" href="/Auth/Login">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="Register">Register</a>
+                                <a class="nav-link text-dark" href="/Auth/Register">Register</a>
                             </li>
                         }
 
@@ -45,15 +46,16 @@
                             @if (Context.Session.GetString("Role") == "Organiser")
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Organiser" asp-action="Index">Organiser Dashboard</a>
+                                    <a class="nav-link text-dark" href="/Organiser">Organiser Dashboard</a>
                                 </li>
                             }
 
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="Logout">Logout</a>
+                                <a class="nav-link text-dark" href="/Auth/Logout">Logout</a>
                             </li>
                         }
                     </ul>
+                    
                 </div>
             </div>
         </nav>
