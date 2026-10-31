@@ -20,3 +20,85 @@ html {
 body {
   margin-bottom: 60px;
 }
+/* --- RaceDay Custom Theme Colors --- */
+:root {
+    --raceday-navy: #001f3f; /* Deep Navy Blue Background */
+    --raceday-violet: #7b2cbf; /* Violet for form/card backgrounds */
+    --raceday-btn-normal: #ffffff; /* Normal/White button color */
+    --raceday-hover-pink: #f72585; /* Deep Pink hover */
+    --raceday-link-color: #4cc9f0; /* Light blue for links so they pop on violet */
+}
+
+/* 1. Navy Blue Background for the whole app */
+body {
+    background-color: var(--raceday-navy);
+    background: linear-gradient(135deg, #001f3f 0%, #003366 100%);
+    min-height: 100vh;
+    color: #ffffff; /* Make default text white so it's readable on navy */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 2. Violet Cards (Text Background) */
+.card {
+    background-color: var(--raceday-violet);
+    border: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    color: #ffffff; /* White text on violet background */
+}
+
+.card-header.raceday-header {
+    background-color: rgba(0, 0, 0, 0.2); /* Slightly darker violet for header */
+    color: white;
+    font-weight: bold;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+/* 3. Form Inputs (Make them readable on violet) */
+.form-control, .form-select {
+    background-color: rgba(255, 255, 255, 0.95);
+    border: none;
+    color: #333;
+    border-radius: 6px;
+}
+
+    .form-control:focus, .form-select:focus {
+        background-color: #ffffff;
+        box-shadow: 0 0 0 0.25rem rgba(247, 37, 133, 0.5); /* Pink glow on focus */
+    }
+
+.form-label {
+    color: #f8f9fa; /* Light text for labels */
+    font-weight: 500;
+}
+
+/* Links inside the violet cards */
+.card a {
+    color: var(--raceday-link-color);
+    text-decoration: none;
+}
+
+    .card a:hover {
+        color: white;
+        text-decoration: underline;
+    }
+
+/* 4. Custom RaceDay Button (Normal/White -> Deep Pink) */
+.btn-raceday {
+    background-color: var(--raceday-btn-normal);
+    color: var(--raceday-navy); /* Navy text on white button */
+    border: none;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    border-radius: 6px;
+}
+
+    .btn-raceday:hover {
+        background-color: var(--raceday-hover-pink);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(247, 37, 133, 0.5);
+    }

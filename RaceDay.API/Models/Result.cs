@@ -15,7 +15,7 @@ namespace RaceDay.API.Models
         public Enrolment Enrolment { get; set; }
 
         [Required]
-        public TimeSpan FinishTime { get; set; } 
+        public TimeSpan FinishTime { get; set; } = TimeSpan.Zero;
 
         [Required]
         public int Position { get; set; }
