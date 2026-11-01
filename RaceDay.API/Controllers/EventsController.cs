@@ -2,6 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using RaceDay.API.Data;
 using RaceDay.API.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RaceDay.API.Controllers
 {
@@ -44,7 +48,7 @@ namespace RaceDay.API.Controllers
 
         // POST: api/events (Restricted - Organisers ONLY)
         [HttpPost]
-        public async Task<ActionResult<Event>> PostEvent(Event @event)
+        public async Task<ActionResult<Event>> PostEvent(EventCreateDto dto)
         {
             // 1. Check if user is logged in via Session
             var userId = HttpContext.Session.GetInt32("UserId");
@@ -55,18 +59,28 @@ namespace RaceDay.API.Controllers
 
             // 2. Check if the logged-in user is an Organiser
             var role = HttpContext.Session.GetString("Role");
-            if (role != "Organiser")
+            if (role == null || !role.Equals("Organiser", StringComparison.OrdinalIgnoreCase))
             {
                 return StatusCode(403, "Only Organisers can create events."); // 403 Forbidden
             }
 
-            // 3. Automatically assign the logged-in user as the organiser of this event
-            @event.OrganiserId = userId.Value;
+            // Manually create the Event object using the simple DTO data.
+            // This completely bypasses the strict validation on the main Event model's navigation properties!
+            var newEvent = new Event
+            {
+                Name = dto.Name,
+                Description = dto.Description,
+                EventDate = dto.EventDate,
+                Location = dto.Location,
+                Distance = dto.Distance,
+                EventTypeId = dto.EventTypeId,
+                OrganiserId = userId.Value // Automatically assign the logged-in user
+            };
 
-            _context.Events.Add(@event);
+            _context.Events.Add(newEvent);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetEvent), new { id = @event.EventId }, @event);
+            return CreatedAtAction(nameof(GetEvent), new { id = newEvent.EventId }, newEvent);
         }
     }
 }

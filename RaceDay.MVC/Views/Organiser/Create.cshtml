@@ -1,0 +1,83 @@
+﻿@model RaceDay.MVC.ViewModels.EventCreateViewModel
+
+@{
+    ViewData["Title"] = "Create Event";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header raceday-header">
+                    <h4 class="mb-0 text-center">Create New RaceDay Event</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label">Event Name</label>
+                            <input asp-for="Name" class="form-control" placeholder="e.g. Soweto Marathon 2026" required />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Tell participants about the event..." required></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="EventDate" class="form-label">Event Date</label>
+                                <input asp-for="EventDate" class="form-control" type="date" required />
+                                <span asp-validation-for="EventDate" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Location" class="form-label">Location</label>
+                                <input asp-for="Location" class="form-control" placeholder="e.g. Johannesburg" required />
+                                <span asp-validation-for="Location" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Distance" class="form-label">Distance (km)</label>
+                                <input asp-for="Distance" class="form-control" type="number" step="0.1" placeholder="e.g. 42.2" required />
+                                <span asp-validation-for="Distance" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="EventTypeId" class="form-label">Event Type</label>
+                                <!-- DROPDOWN FIXED TO MATCH YOUR DATABASE EXACTLY -->
+                                <select asp-for="EventTypeId" class="form-select" required>
+                                    <option value="">-- Select Event Type --</option>
+                                    <option value="1">Run</option>
+                                    <option value="2">Walk</option>
+                                    <option value="3">Cycle</option>
+                                </select>
+                                <span asp-validation-for="EventTypeId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="BannerImage" class="form-label">Event Banner Image (Optional)</label>
+                            <input asp-for="BannerImage" class="form-control" type="file" accept="image/*" />
+                            <small class="text-muted">Supported formats: JPG, PNG</small>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-lightblue">Cancel</a>
+                            <button type="submit" class="btn btn-raceday px-4">Create Event</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

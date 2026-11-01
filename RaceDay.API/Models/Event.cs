@@ -8,37 +8,32 @@ namespace RaceDay.API.Models
         [Key]
         public int EventId { get; set; }
 
-        [Required, MaxLength(100)]
+        [Required]
         public string Name { get; set; }
 
-        [MaxLength(500)]
-        public string? Description { get; set; }
+        [Required]
+        public string Description { get; set; }
 
         [Required]
         public DateTime EventDate { get; set; }
 
-        [Required, MaxLength(100)]
+        [Required]
         public string Location { get; set; }
-        
-        [Required, Column(TypeName = "decimal(5,2)")]
+
+        [Required]
         public decimal Distance { get; set; }
 
-        // Foreign Keys
+        // FOREIGN KEYS (Keep [Required] here)
         [Required]
         public int EventTypeId { get; set; }
-        [ForeignKey("EventTypeId")]
-        public EventType EventType { get; set; }
 
         [Required]
         public int OrganiserId { get; set; }
-        [ForeignKey("OrganiserId")]
+
+        // NAVIGATION PROPERTIES 
+        public EventType EventType { get; set; }
         public User Organiser { get; set; }
-
-        [MaxLength(255)]
-        public string? BannerImageUrl { get; set; }
-
-        // Navigation properties
-        public ICollection<Category> Categories { get; set; }
-        public ICollection<Enrolment> Enrolments { get; set; }
+        public List<Category> Categories { get; set; }
+        public List<Enrolment> Enrolments { get; set; }
     }
 }
