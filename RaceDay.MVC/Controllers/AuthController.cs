@@ -22,6 +22,7 @@ namespace RaceDay.MVC.Controllers
             return View();
         }
 
+        
         // POST: Auth/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -39,15 +40,17 @@ namespace RaceDay.MVC.Controllers
             {
                 var responseData = await response.Content.ReadFromJsonAsync<JsonElement>();
 
-                // Store user details in MVC Session
-                HttpContext.Session.SetInt32("UserId", responseData.GetProperty("userId").GetInt32());
-                HttpContext.Session.SetString("Role", responseData.GetProperty("role").GetString()!);
+               
+                int userId = responseData.GetProperty("userId").GetInt32();
+                string role = responseData.GetProperty("role").GetString()!;
 
-                // Redirect based on role
-                if (responseData.GetProperty("role").GetString() == "Organiser")
+                HttpContext.Session.SetInt32("UserId", userId);
+                HttpContext.Session.SetString("Role", role);
+
+                if (role == "Organiser")
                     return RedirectToAction("Index", "Organiser");
                 else
-                    return RedirectToAction("Index", "Home"); // Participant goes to home
+                    return RedirectToAction("Index", "Home");
             }
 
             ModelState.AddModelError("", "Invalid email or password.");
