@@ -40,17 +40,21 @@ namespace RaceDay.MVC.Controllers
             {
                 var responseData = await response.Content.ReadFromJsonAsync<JsonElement>();
 
-               
                 int userId = responseData.GetProperty("userId").GetInt32();
                 string role = responseData.GetProperty("role").GetString()!;
 
                 HttpContext.Session.SetInt32("UserId", userId);
                 HttpContext.Session.SetString("Role", role);
 
-                if (role == "Organiser")
+                if (role.Equals("Organiser", StringComparison.OrdinalIgnoreCase) ||
+                    role.Equals("Organizer", StringComparison.OrdinalIgnoreCase))
+                {
                     return RedirectToAction("Index", "Organiser");
+                }
                 else
+                {
                     return RedirectToAction("Index", "Home");
+                }
             }
 
             ModelState.AddModelError("", "Invalid email or password.");

@@ -42,10 +42,22 @@ namespace RaceDay.API.Tests
             };
 
             // Act
-            var result = await controller.PostEvent(newEvent);
+            // Create a DTO instead of a full Event
+            var testDto = new EventCreateDto
+            {
+                Name = "Test Event",
+                Description = "Test",
+                EventDate = DateTime.Now,
+                Location = "Test",
+                Distance = 10,
+                EventTypeId = 1
+            };
+
+            // Pass the DTO to the controller
+            var result = await controller.PostEvent(testDto);
 
             // Assert (Safe check)
-            
+
             var objectResult = result.Result as ObjectResult;
 
             Assert.NotNull(objectResult); // Proves it returned an ObjectResult

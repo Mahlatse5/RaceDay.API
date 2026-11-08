@@ -65,10 +65,12 @@ namespace RaceDay.API.Controllers
             }
 
             // 3. Set Session Variables 
-            HttpContext.Session.SetInt32("UserId", user.UserID);
+            HttpContext.Session.SetInt32("UserId", user.UserId);
             HttpContext.Session.SetString("Role", user.Role);
 
-            return Ok(new { Message = "Login successful", UserId = user.UserID, Role = user.Role });
+           
+            return Ok(new { Message = "Login successful", UserId = user.UserId, Role = user.Role });
         }
     }
 }
+

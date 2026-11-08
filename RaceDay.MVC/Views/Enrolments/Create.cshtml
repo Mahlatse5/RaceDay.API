@@ -1,0 +1,33 @@
+﻿@model RaceDay.API.Models.Event
+
+@{
+    ViewData["Title"] = "Confirm Enrolment";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header raceday-header text-center">
+                    <h4 class="mb-0">Confirm Enrolment</h4>
+                </div>
+                <div class="card-body p-4 text-center">
+                    <h5 class="text-white">You are about to enrol in:</h5>
+                    <h3 class="text-raceday mt-3">@Model.Name</h3>
+                    <p class="text-lightblue">
+                        @Model.EventDate.ToString("dd MMM yyyy") in @Model.Location<br>
+                        Distance: @Model.Distance km
+                    </p>
+
+                    <form asp-action="CreateConfirmed" asp-route-id="@Model.EventId" method="post" class="mt-4">
+                        @Html.AntiForgeryToken()
+                        <div class="d-flex justify-content-center gap-3">
+                            <a asp-action="Index" asp-controller="Home" class="btn btn-lightblue">Cancel</a>
+                            <button type="submit" class="btn btn-raceday px-4">Yes, Enrol Me!</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

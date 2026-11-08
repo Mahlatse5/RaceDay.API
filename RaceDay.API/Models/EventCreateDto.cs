@@ -10,5 +10,8 @@
         public decimal Distance { get; set; }
         public int EventTypeId { get; set; }
         public int OrganiserId { get; set; }
+        public string BannerImageUrl { get; set; }
+
+
     }
 }

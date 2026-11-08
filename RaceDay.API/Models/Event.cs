@@ -35,5 +35,6 @@ namespace RaceDay.API.Models
         public User Organiser { get; set; }
         public List<Category> Categories { get; set; }
         public List<Enrolment> Enrolments { get; set; }
+        public string? BannerImageUrl { get; internal set; }
     }
 }

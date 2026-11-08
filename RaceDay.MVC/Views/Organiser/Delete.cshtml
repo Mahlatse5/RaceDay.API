@@ -1,0 +1,26 @@
+﻿@model RaceDay.API.Models.Event
+@{
+    ViewData["Title"] = "Delete Event";
+}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-danger">
+                <div class="card-header bg-danger text-white"><h4 class="mb-0 text-center">Confirm Deletion</h4></div>
+                <div class="card-body p-4 text-center">
+                    <h5>Are you sure you want to delete this event?</h5>
+                    <h3 class="text-raceday mt-3">@Model.Name</h3>
+                    <p class="text-muted">@Model.EventDate.ToString("dd MMM yyyy") in @Model.Location</p>
+
+                    <form asp-action="Delete" asp-route-id="@Model.EventId" method="post" class="mt-4">
+                        @Html.AntiForgeryToken()
+                        <div class="d-flex justify-content-center gap-3">
+                            <a asp-action="Index" class="btn btn-lightblue">Cancel</a>
+                            <button type="submit" class="btn btn-danger px-4">Yes, Delete It</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

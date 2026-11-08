@@ -1,8 +1,59 @@
-﻿@{
+﻿@model List<RaceDay.API.Models.Event>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="text-white display-4">Upcoming RaceDay Events</h1>
+        <p class="text-lightblue">Find your next challenge and register today!</p>
+    </div>
+
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-white">@item.Name</h5>
+                            <p class="card-text text-lightblue">
+                                <strong>Date:</strong> @item.EventDate.ToString("dd MMM yyyy")<br>
+                                <strong>Location:</strong> @item.Location<br>
+                                <strong>Distance:</strong> @item.Distance km<br>
+                                <strong>Type:</strong> @(item.EventType?.TypeName ?? "General")
+                            </p>
+
+                            @* Check if user is logged in *@
+                            @if (Context.Session.GetInt32("UserId") != null)
+                            {
+                                <a asp-controller="Enrolments" asp-action="Create" asp-route-id="@item.EventId" class="btn btn-raceday w-100">
+                                    Enrol Now
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Auth" asp-action="Login" class="btn btn-lightblue w-100">
+                                    Login to Enrol
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="text-center text-white mt-5">
+            <h3>No upcoming events at the moment. Check back soon!</h3>
+        </div>
+    }
 </div>

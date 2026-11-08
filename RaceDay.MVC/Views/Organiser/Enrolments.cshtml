@@ -1,0 +1,47 @@
+﻿@model List<RaceDay.API.Models.Enrolment>
+
+@{
+    ViewData["Title"] = "Event Enrolments";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white">Participant List</h2>
+        <a asp-action="Index" class="btn btn-lightblue">Back to Dashboard</a>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            @if (Model != null && Model.Any())
+            {
+                <table class="table table-hover text-white">
+                    <thead>
+                        <tr>
+                            <th>Participant Name</th>
+                            <th>Email</th>
+                            <th>Enrolment Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@($"{item.Participant?.FirstName} {item.Participant?.LastName}")</td>
+                                <td>@(item.Participant?.Email ?? "No Email")</td>
+                                <td>@item.EnrolmentDate.ToString("dd MMM yyyy")</td>
+                                <td><span class="badge bg-success">@item.Status</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="text-center py-4">
+                    <h4 class="text-lightblue">No participants have enrolled in this event yet.</h4>
+                </div>
+            }
+        </div>
+    </div>
+</div>

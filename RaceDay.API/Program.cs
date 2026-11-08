@@ -1,11 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using RaceDay.API.Data;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
-
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // This stops the infinite loop crash
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+    });
 // 1. Connect to the Database
 builder.Services.AddDbContext<RaceDayDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -19,20 +25,21 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// 3. Enable CORS for Part 3 (Allows Frontend to talk to API)
+// 3. Enable CORS for Part 3
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy.WithOrigins(
-            "http://localhost:3000", // Standard React port
-            "http://localhost:5173", // Vite/React port
-            "http://localhost:4200", // Angular port
-            "https://localhost:7123" // Blazor port
+            "http://localhost:3000",
+            "http://localhost:5173",
+            "http://localhost:4200",
+            "https://localhost:7128", // Your MVC Port
+            "https://localhost:7123"  // Blazor port
         )
         .AllowAnyHeader()
         .AllowAnyMethod()
-        .AllowCredentials(); // CRITICAL: Required for Session/Cookie authentication to work!
+        .AllowCredentials();
     });
 });
 
@@ -51,7 +58,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // Middleware order is very important!
-app.UseCors("AllowFrontend"); // Must be placed before Session and Authorization
+app.UseCors("AllowFrontend");
 app.UseSession();
 app.UseAuthorization();
 

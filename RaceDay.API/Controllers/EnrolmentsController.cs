@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore; // Required for ToListAsync and Include
 using RaceDay.API.Data;
 using RaceDay.API.Models;
 
@@ -48,7 +48,7 @@ namespace RaceDay.API.Controllers
             {
                 ParticipantId = userId.Value,
                 EventId = dto.EventId,
-                CategoryId = dto.CategoryId,
+                
                 EnrolmentDate = DateTime.Now,
                 Status = "Confirmed"
             };
@@ -57,6 +57,20 @@ namespace RaceDay.API.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(new { Message = "Successfully enrolled in the event.", EnrolmentId = enrolment.EnrolmentId });
+        }
+
+        // GET: api/enrolments/event/5
+        [HttpGet("event/{eventId}")]
+        public async Task<ActionResult<IEnumerable<Enrolment>>> GetEnrolmentsByEvent(int eventId)
+        {
+            // Include the Participant (User) so we can see their name and email
+           
+            var enrolments = await _context.Enrolments
+                .Include(e => e.Participant)
+                .Where(e => e.EventId == eventId)
+                .ToListAsync();
+
+            return Ok(enrolments);
         }
     }
 
