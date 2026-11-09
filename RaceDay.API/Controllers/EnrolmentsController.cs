@@ -93,12 +93,43 @@ namespace RaceDay.API.Controllers
 
             return Ok(enrolments);
         }
+
+        // PUT: api/enrolments/5/finish
+        [HttpPut("{id}/finish")]
+        public async Task<IActionResult> UpdateFinishTime(int id, [FromBody] string finishTime)
+        {
+            var enrolment = await _context.Enrolments.FindAsync(id);
+            if (enrolment == null)
+            {
+                return NotFound();
+            }
+
+            enrolment.FinishTime = finishTime;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // GET: api/enrolments/participant/5
+        [HttpGet("participant/{participantId}")]
+        public async Task<ActionResult<IEnumerable<Enrolment>>> GetParticipantResults(int participantId)
+        {
+            var results = await _context.Enrolments
+                .Where(e => e.ParticipantId == participantId && e.FinishTime != null)
+                .ToListAsync();
+
+            return Ok(results);
+        }
     }
 
     // Simple DTO to capture the request body
     public class EnrolmentRequestDto
     {
+        private object _context;
+
         public int EventId { get; set; }
         public int CategoryId { get; set; }
+
+       
     }
 }

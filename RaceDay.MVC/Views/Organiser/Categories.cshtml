@@ -1,0 +1,72 @@
+﻿@model List<RaceDay.API.Models.Category>
+
+@{
+    ViewData["Title"] = "Manage Categories";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white">Manage Categories</h2>
+        <a asp-action="Index" class="btn btn-light">Back to Dashboard</a>
+    </div>
+
+    <div class="row">
+        <!-- Form to Add New Category -->
+        <div class="col-md-5">
+            <div class="card shadow" style="background-color: #6f42c1; border: none;">
+                <div class="card-body text-white">
+                    <h4>Add New Category</h4>
+                    <form asp-action="AddCategory" method="post">
+                        <input type="hidden" name="eventId" value="@ViewBag.EventId" />
+
+                        <div class="mb-3">
+                            <label class="form-label">Category Name (e.g., 10km, Senior)</label>
+                            <input type="text" name="categoryName" class="form-control" required />
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label class="form-label">Min Age</label>
+                                <input type="number" name="minAge" class="form-control" />
+                            </div>
+                            <div class="col">
+                                <label class="form-label">Max Age</label>
+                                <input type="number" name="maxAge" class="form-control" />
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">Add Category</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- List of Existing Categories -->
+        <div class="col-md-7">
+            <div class="card shadow" style="background-color: #6f42c1; border: none;">
+                <div class="card-body text-white">
+                    <h4>Existing Categories</h4>
+                    @if (Model != null && Model.Any())
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var cat in Model)
+                            {
+                                <li class="list-group-item" style="background-color: #6f42c1; color: white; border-color: #8b5cf6;">
+                                    <strong>@cat.CategoryName</strong>
+                                    @if (cat.MinAge.HasValue && cat.MaxAge.HasValue)
+                                    {
+                                        <span class="badge bg-light text-dark ms-2">Ages @cat.MinAge - @cat.MaxAge</span>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-light">No categories added yet.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

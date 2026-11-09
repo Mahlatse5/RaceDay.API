@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RaceDay.API.Models;
+using RaceDay.MVC.Models;
 using RaceDay.MVC.ViewModels;
 using System.Net.Http.Json;
 using System.Text;
@@ -65,6 +66,52 @@ namespace RaceDay.MVC.Controllers
 
             ViewBag.EventId = id;
             return View(enrolments);
+        }
+        // GET: Organiser/Categories/5
+        public async Task<IActionResult> Categories(int id)
+        {
+            if (HttpContext.Session.GetInt32("UserId") == null)
+                return RedirectToAction("Login", "Auth");
+
+            var client = _httpClientFactory.CreateClient("RaceDayAPI");
+            var response = await client.GetAsync($"api/categories/event/{id}");
+
+            List<Category> categories = new List<Category>();
+            if (response.IsSuccessStatusCode)
+            {
+                categories = await response.Content.ReadFromJsonAsync<List<Category>>() ?? new List<Category>();
+            }
+
+            ViewBag.EventId = id;
+            return View(categories);
+        }
+
+        // POST: Organiser/AddCategory
+        [HttpPost]
+        public async Task<IActionResult> AddCategory(int eventId, string categoryName, int? minAge, int? maxAge)
+        {
+            var client = _httpClientFactory.CreateClient("RaceDayAPI");
+
+            var categoryData = new
+            {
+                EventId = eventId,
+                CategoryName = categoryName,
+                MinAge = minAge,
+                MaxAge = maxAge
+            };
+
+            var json = System.Text.Json.JsonSerializer.Serialize(categoryData);
+            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync("api/categories", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Categories", new { id = eventId });
+            }
+
+            // If it fails, just go back to the page
+            return RedirectToAction("Categories", new { id = eventId });
         }
 
         // GET: Organiser/Create

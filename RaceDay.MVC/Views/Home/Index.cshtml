@@ -43,6 +43,10 @@
                                 <a asp-controller="Auth" asp-action="Login" class="btn btn-lightblue w-100">
                                     Login to Enrol
                                 </a>
+                                <a asp-action="Enter" asp-controller="Results" asp-route-eventId="@item.EventId" class="btn btn-info text-white">Enter Results</a>
+                                <a asp-action="MyResults" asp-controller="Results" class="btn btn-primary">
+                                    <i class="fas fa-trophy"></i> View My Results
+                                </a>
                             }
                         </div>
                     </div>

@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Net.Http.Json;
-using System.Text.Json;
-using System.Text;
 using RaceDay.API.Models;
+using RaceDay.MVC.Models;
+using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 
 namespace RaceDay.MVC.Controllers
 {
@@ -45,7 +46,7 @@ namespace RaceDay.MVC.Controllers
             var client = _httpClientFactory.CreateClient("RaceDayAPI");
 
             // 3. Create the payload. 
-            
+
             var enrolmentData = new
             {
                 EventId = id,
@@ -68,6 +69,31 @@ namespace RaceDay.MVC.Controllers
             var error = await response.Content.ReadAsStringAsync();
             TempData["ErrorMessage"] = "Enrolment failed: " + error;
             return RedirectToAction("Index", "Home");
+        }
+
+        // GET: Enrolments/MyEnrolments
+        [HttpGet]
+        public async Task<IActionResult> MyEnrolments()
+        {
+            var client = _httpClientFactory.CreateClient("RaceDayAPI");
+
+            // Get the Participant ID from the Session
+            var participantId = HttpContext.Session.GetInt32("ParticipantId");
+
+            if (participantId == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            var response = await client.GetAsync($"api/enrolments/my-enrolments/{participantId}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var enrolments = await response.Content.ReadFromJsonAsync<List<Enrolment>>();
+                return View(enrolments);
+            }
+
+            return View("Error");
         }
     }
 }

@@ -21,7 +21,7 @@
             @foreach (var item in Model)
             {
                 <div class="col-md-4 mb-4">
-                    <!-- Added inline style to match your purple theme -->
+                   
                     <div class="card shadow h-100" style="background-color: #6f42c1; border: none;">
 
                         @* Show the image if it exists *@
@@ -47,6 +47,7 @@
                                 <a asp-action="Enrolments" asp-route-id="@item.EventId" class="btn btn-sm btn-success">
                                     View Enrolments
                                 </a>
+                                <a asp-action="Categories" asp-route-id="@item.EventId" class="btn btn-sm btn-warning me-2">Manage Categories</a>
 
                                 <div>
                                     <a asp-action="Edit" asp-route-id="@item.EventId" class="btn btn-sm btn-light me-1">Edit</a>

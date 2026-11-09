@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Enter Results";
+    int eventId = ViewBag.EventId;
+}
+
+<div class="container mt-4">
+    <h2>Enter Results for Event #@eventId</h2>
+    <p class="text-muted">Enter the finish time (e.g., 03:45:00) and position for the participant.</p>
+
+    <form asp-action="Enter" method="post">
+        <div class="mb-3">
+            <label for="enrolmentId" class="form-label">Enrolment ID</label>
+            <input type="number" name="enrolmentId" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="finishTime" class="form-label">Finish Time</label>
+            <input type="text" name="finishTime" class="form-control" placeholder="HH:MM:SS" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="position" class="form-label">Position</label>
+            <input type="number" name="position" class="form-control" required />
+        </div>
+
+        <button type="submit" class="btn btn-success">Save Result</button>
+        <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

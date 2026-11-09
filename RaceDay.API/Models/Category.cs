@@ -10,15 +10,16 @@ namespace RaceDay.API.Models
 
         [Required]
         public int EventId { get; set; }
-        [ForeignKey("EventId")] 
-        public Event Event { get; set; }
+
+        [ForeignKey("EventId")]
+        public Event? Event { get; set; }  
 
         [Required, MaxLength(50)]
-        public string CategoryName { get; set; }
+        public string CategoryName { get; set; } = string.Empty;  
 
         public int? MinAge { get; set; }
         public int? MaxAge { get; set; }
 
-        public ICollection<Enrolment> Enrolments { get; set; }
+        public ICollection<Enrolment>? Enrolments { get; set; }  
     }
 }

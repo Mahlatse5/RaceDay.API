@@ -1,29 +1,37 @@
-using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// 1. Enable Sessions (Same as API)
-builder.Services.AddSession(options =>
-{
+// 1. Add Session Support (This fixes your error)
+builder.Services.AddSession(options => {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
 
-// 2. Register HttpClient to talk to the Part 2 API
-// Configure HttpClient to share cookies/session with the API
+// 2. Configure Cookie Authentication
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Auth/Login";
+        options.LogoutPath = "/Auth/Logout";
+        options.AccessDeniedPath = "/Auth/Login";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.IsEssential = true;
+    });
+
+// 3. Register HttpClient to talk to the API
 builder.Services.AddHttpClient("RaceDayAPI", client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7053/"); // Your API URL
-})
-.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+    client.BaseAddress = new Uri("http://localhost:5053");
+}).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
 {
     UseCookies = true,
-    CookieContainer = new System.Net.CookieContainer()
+    CookieContainer = new CookieContainer()
 });
 
 var app = builder.Build();
@@ -40,9 +48,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// 3. Turn on Session Middleware
+// 4. Turn on Session and Auth (Order matters!)
 app.UseSession();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
