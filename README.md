@@ -59,3 +59,49 @@ We implemented xUnit tests to ensure security and functionality:
 ### 3. CI/CD Pipeline
 A GitHub Actions workflow was added to automatically build the .NET project and run all unit tests on every push.
 ![CI/CD Pipeline](docs/ci-cd-dotnet.png) 
+
+PART 3 
+
+# RaceDay - Event Management System
+
+## Project Overview
+RaceDay is a full-stack web application designed to manage running events, participant enrolments, and race results. The system features role-based access control, separating functionality for Event Organisers and Race Participants.
+
+## Technologies Used
+- **Backend API:** ASP.NET Core Web API (.NET 8)
+- **Frontend:** ASP.NET Core MVC
+- **Database:** SQL Server (via Entity Framework Core)
+- **Language:** C#
+- **Frontend Styling:** HTML5, CSS3, Bootstrap
+
+## Features Implemented
+
+### Authentication & Authorization
+- Secure login and registration system.
+- Role-based dashboards for **Organisers** and **Participants**.
+- Session management and cookie-based authentication.
+
+### Organiser Features
+- **Dashboard:** View and manage upcoming events.
+- **Manage Categories:** Create and manage race distance categories (e.g., 10km, 21km, 42km).
+- **Enter Results:** Input finish times and positions for participants after a race.
+
+### Participant Features
+- **Dashboard:** View available upcoming events.
+- **Enrolments:** Sign up for available races.
+- **My Enrolments:** View a list of all races the participant has signed up for.
+- **My Results:** View personal race history, including finish times and final positions.
+
+---
+
+## How to Run the Project
+
+*Note: To avoid IIS Express port conflicts, please run the projects using the terminal as described below.*
+
+### 1. Database Setup
+1. Open the solution in Visual Studio.
+2. Open the **Package Manager Console** (`Tools` > `NuGet Package Manager` > `Package Manager Console`).
+3. Ensure the **Default project** is set to `RaceDay.API`.
+4. Run the following command to ensure the database is up to date:
+   ```text
+   Update-Database
