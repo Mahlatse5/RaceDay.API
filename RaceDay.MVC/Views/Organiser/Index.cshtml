@@ -4,49 +4,65 @@
     ViewData["Title"] = "Organiser Dashboard";
 }
 
-<div class="container mt-4">
+<div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="text-white">Organiser Dashboard</h2>
-        <a asp-action="Create" class="btn btn-raceday">+ Create New Event</a>
+        <a asp-action="Create" class="btn btn-light">+ Create New Event</a>
     </div>
 
-    <div class="card">
-        <div class="card-body">
-            @if (Model != null && Model.Any())
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var item in Model)
             {
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Event Name</th>
-                            <th>Date</th>
-                            <th>Location</th>
-                            <th>Distance (km)</th>
-                            <th>Type</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
+                <div class="col-md-4 mb-4">
+                    <!-- Added inline style to match your purple theme -->
+                    <div class="card shadow h-100" style="background-color: #6f42c1; border: none;">
+
+                        @* Show the image if it exists *@
+                        @if (!string.IsNullOrEmpty(item.BannerImageUrl))
                         {
-                            <tr>
-                                <td>@item.Name</td>
-                                <td>@item.EventDate.ToString("dd MMM yyyy")</td>
-                                <td>@item.Location</td>
-                                <td>@item.Distance km</td>
-                                <td>@(item.EventType != null ? item.EventType.TypeName : "N/A")</td>
-                                <td>
-                                    <a asp-action="Edit" asp-route-id="@item.EventId" class="btn btn-sm btn-lightblue">Edit</a>
-                                    <a asp-action="Delete" asp-route-id="@item.EventId" class="btn btn-sm btn-pink">Delete</a>
-                                </td>
-                            </tr>
+                            <img src="@item.BannerImageUrl" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;">
                         }
-                    </tbody>
-                </table>
-            }
-            else
-            {
-                <p class="text-center text-white">No events found. Create your first event above!</p>
+
+                        <div class="card-body text-white">
+                            <h5 class="card-title fw-bold">@item.Name</h5>
+                            <p class="card-text mb-1">
+                                <strong>Date:</strong> @item.EventDate.ToString("dd MMM yyyy")
+                            </p>
+                            <p class="card-text mb-1">
+                                <strong>Location:</strong> @item.Location
+                            </p>
+                            <p class="card-text mb-3">
+                                <strong>Distance:</strong> @item.Distance km
+                            </p>
+
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                @* NEW: View Enrolments Button *@
+                                <a asp-action="Enrolments" asp-route-id="@item.EventId" class="btn btn-sm btn-success">
+                                    View Enrolments
+                                </a>
+
+                                <div>
+                                    <a asp-action="Edit" asp-route-id="@item.EventId" class="btn btn-sm btn-light me-1">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@item.EventId" class="btn btn-sm btn-danger">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
         </div>
-    </div>
+    }
+    else
+    {
+        <div class="text-center text-white mt-5">
+            <h3>No events found. Click "Create New Event" to add one!</h3>
+        </div>
+    }
 </div>

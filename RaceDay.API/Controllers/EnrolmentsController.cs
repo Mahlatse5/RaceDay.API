@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore; // Required for ToListAsync and Include
+using Microsoft.EntityFrameworkCore;
 using RaceDay.API.Data;
 using RaceDay.API.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RaceDay.API.Controllers
 {
@@ -48,7 +52,6 @@ namespace RaceDay.API.Controllers
             {
                 ParticipantId = userId.Value,
                 EventId = dto.EventId,
-                
                 EnrolmentDate = DateTime.Now,
                 Status = "Confirmed"
             };
@@ -59,15 +62,33 @@ namespace RaceDay.API.Controllers
             return Ok(new { Message = "Successfully enrolled in the event.", EnrolmentId = enrolment.EnrolmentId });
         }
 
-        // GET: api/enrolments/event/5
+        // GET: api/enrolments/event/5 (For Organiser Dashboard)
         [HttpGet("event/{eventId}")]
         public async Task<ActionResult<IEnumerable<Enrolment>>> GetEnrolmentsByEvent(int eventId)
         {
-            // Include the Participant (User) so we can see their name and email
-           
             var enrolments = await _context.Enrolments
                 .Include(e => e.Participant)
                 .Where(e => e.EventId == eventId)
+                .ToListAsync();
+
+            return Ok(enrolments);
+        }
+
+        // GET: api/enrolments/my-enrolments (For Participant Dashboard)
+        [HttpGet("my-enrolments")]
+        public async Task<ActionResult<IEnumerable<Enrolment>>> GetMyEnrolments()
+        {
+            // 1. Get the logged-in user's ID from the session
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return Unauthorized("You must be logged in.");
+            }
+
+            // 2. Fetch enrolments for this user, and include the Event details
+            var enrolments = await _context.Enrolments
+                .Include(e => e.Event) // This links the enrolment to the Event table
+                .Where(e => e.ParticipantId == userId)
                 .ToListAsync();
 
             return Ok(enrolments);

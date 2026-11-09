@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,10 +15,15 @@ builder.Services.AddSession(options =>
 });
 
 // 2. Register HttpClient to talk to the Part 2 API
+// Configure HttpClient to share cookies/session with the API
 builder.Services.AddHttpClient("RaceDayAPI", client =>
 {
-    // This reads the API URL from appsettings.json
-    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:7123");
+    client.BaseAddress = new Uri("https://localhost:7053/"); // Your API URL
+})
+.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+{
+    UseCookies = true,
+    CookieContainer = new System.Net.CookieContainer()
 });
 
 var app = builder.Build();

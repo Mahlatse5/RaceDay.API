@@ -43,7 +43,7 @@
                             </li>
 
                             @* Only Organisers see the Dashboard link *@
-                            @if (Context.Session.GetString("Role") == "Organiser")
+                            @if (Context.Session.GetString("Role")?.Contains("organ", StringComparison.OrdinalIgnoreCase) == true)
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" href="/Organiser">Organiser Dashboard</a>
